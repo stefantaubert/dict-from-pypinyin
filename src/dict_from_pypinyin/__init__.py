@@ -1,0 +1,1 @@
+from dict_from_pypinyin.api import word_to_pinyin
