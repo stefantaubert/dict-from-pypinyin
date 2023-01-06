@@ -10,6 +10,7 @@ from typing import Dict, Optional, Tuple
 from ordered_set import OrderedSet
 from pronunciation_dictionary import (PronunciationDict, Pronunciations, SerializationOptions, Word,
                                       save_dict)
+from pypinyin import Style, pinyin
 from tqdm import tqdm
 from word_to_pronunciation import Options, get_pronunciations_from_word
 
@@ -37,6 +38,9 @@ def get_app_try_add_vocabulary_from_pronunciations_parser(parser: ArgumentParser
                       help="trim these symbols from the start and end of a word before lookup", action=ConvertToOrderedSetAction, default=DEFAULT_PUNCTUATION)
   parser.add_argument("--split-on-hyphen", action="store_true",
                       help="split words on hyphen symbol before lookup")
+  parser.add_argument("--v-to-u", action="store_true",
+                      help="whether to use `ü` instead of the original `v` in the result of the non-tone-related pinyin style; default behavior: `v` is used in the result for `ü`")
+  parser.add_argument("--style", choices=[Style.NORMAL, Style.TONE], default=Style.NORMAL)
   parser.add_argument("--oov-out", metavar="OOV-PATH", type=get_optional(parse_path),
                       help="write out-of-vocabulary (OOV) words (i.e., words that can't transcribed) to this file (encoding will be the same as the one from the vocabulary file)", default=default_oov_out)
   add_serialization_group(parser)
@@ -62,7 +66,7 @@ def get_pronunciations_files(ns: Namespace) -> bool:
   options = Options(trim_symbols, ns.split_on_hyphen, False, False, ns.weight)
 
   dictionary_instance, unresolved_words = get_pronunciations(
-    vocabulary_words, ns.weight, options, ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
+    vocabulary_words, ns.style, ns.v_to_u, ns.weight, options, ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 
   s_options = SerializationOptions(ns.parts_sep, ns.include_numbers, ns.include_weights)
 
@@ -92,10 +96,12 @@ def get_pronunciations_files(ns: Namespace) -> bool:
   return True
 
 
-def get_pronunciations(vocabulary: OrderedSet[Word], weight: float, options: Options, n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> Tuple[PronunciationDict, OrderedSet[Word]]:
+def get_pronunciations(vocabulary: OrderedSet[Word], style: Style, v_to_u: bool, weight: float, options: Options, n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> Tuple[PronunciationDict, OrderedSet[Word]]:
   lookup_method = partial(
     process_get_pronunciation,
     weight=weight,
+    style=style,
+    v_to_u=v_to_u,
     options=options,
   )
 
@@ -136,7 +142,7 @@ def __init_pool_prepare_cache_mp(words: OrderedSet[Word]) -> None:
   process_unique_words = words
 
 
-def process_get_pronunciation(word_i: int, weight: float, options: Options) -> Tuple[int, Pronunciations]:
+def process_get_pronunciation(word_i: int, style: Style, v_to_u: bool, weight: float, options: Options) -> Tuple[int, Pronunciations]:
   global process_unique_words
   assert 0 <= word_i < len(process_unique_words)
   word = process_unique_words[word_i]
@@ -144,6 +150,8 @@ def process_get_pronunciation(word_i: int, weight: float, options: Options) -> T
   # TODO support all entries; also create all combinations with hyphen then
   lookup_method = partial(
     lookup_in_model,
+    style=style,
+    v_to_u=v_to_u,
     weight=weight,
   )
 
@@ -153,10 +161,10 @@ def process_get_pronunciation(word_i: int, weight: float, options: Options) -> T
   return word_i, pronunciations
 
 
-def lookup_in_model(word: Word, weight: float) -> Pronunciations:
+def lookup_in_model(word: Word, style: Style, v_to_u: bool, weight: float) -> Pronunciations:
   assert len(word) > 0
   try:
-    word_pinyins = word_to_pinyin(word)
+    word_pinyins = word_to_pinyin(word, style, v_to_u)
   except ValueError as error:
     return OrderedDict()
   result = OrderedDict(

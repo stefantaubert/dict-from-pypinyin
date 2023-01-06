@@ -5,16 +5,16 @@ from ordered_set import OrderedSet
 from pypinyin import Style, pinyin
 
 
-def word_to_pinyin(word: str) -> OrderedSet[Tuple[str, ...]]:
+def word_to_pinyin(word: str, style: Style, v_to_u: bool) -> OrderedSet[Tuple[str, ...]]:
   assert isinstance(word, str)
   assert len(word) > 0
 
   syllables_pinyins = []
   for syllable in word:
     try:
-      syllable_pinyins = pinyin(syllable, style=Style.TONE, heteronym=True,
+      syllable_pinyins = pinyin(syllable, style=style, heteronym=True,
                                 errors='default', strict=True,
-                                v_to_u=False, neutral_tone_with_five=False)
+                                v_to_u=v_to_u, neutral_tone_with_five=False)
     except ValueError as error:
       raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!") from error
 
