@@ -40,7 +40,7 @@ def get_app_try_add_vocabulary_from_pronunciations_parser(parser: ArgumentParser
                       help="split words on hyphen symbol before lookup")
   parser.add_argument("--v-to-u", action="store_true",
                       help="whether to use `ü` instead of the original `v` in the result of the non-tone-related pinyin style; default behavior: `v` is used in the result for `ü`")
-  parser.add_argument("--style", choices=[Style.NORMAL, Style.TONE], default=Style.NORMAL)
+  parser.add_argument("--style", choices=[Style.NORMAL, Style.TONE], default=Style.TONE)
   parser.add_argument("--oov-out", metavar="OOV-PATH", type=get_optional(parse_path),
                       help="write out-of-vocabulary (OOV) words (i.e., words that can't transcribed) to this file (encoding will be the same as the one from the vocabulary file)", default=default_oov_out)
   add_serialization_group(parser)
