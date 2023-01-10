@@ -4,11 +4,15 @@ import sys
 from argparse import ArgumentParser
 from importlib.metadata import version
 from logging import getLogger
+from pathlib import Path
+from tempfile import gettempdir
 from typing import Callable, Generator, List, Tuple
 
+from dict_from_pypinyin.logging_configuration import configure_root_logger
 from dict_from_pypinyin.main import get_app_try_add_vocabulary_from_pronunciations_parser
 
-__version__ = version("dict-from-pypinyin")
+PROG_NAME = "dict-from-pypinyin"
+__version__ = version(PROG_NAME)
 
 INVOKE_HANDLER_VAR = "invoke_handler"
 
@@ -50,17 +54,26 @@ def configure_logger(productive: bool) -> None:
   console.setLevel(loglevel)
 
 
-def parse_args(args: List[str], productive: bool = False):
-  configure_logger(productive)
-  logger = getLogger(__name__)
-  logger.debug("Received args:")
-  logger.debug(args)
+def parse_args(args: List[str]):
+  configure_root_logger()
+
+  root_logger = getLogger()
+
+  local_debugging = debug_file_exists()
+  if local_debugging:
+    root_logger.debug(f"Received arguments: {str(args)}")
+
   parser = _init_parser()
+
   if len(args) == 0:
     parser.print_help()
     return
 
   received_args = parser.parse_args(args)
+
+  if local_debugging:
+    root_logger.debug(f"Parsed arguments: {str(received_args)}")
+
   params = vars(received_args)
 
   if INVOKE_HANDLER_VAR in params:
@@ -70,14 +83,23 @@ def parse_args(args: List[str], productive: bool = False):
     parser.print_help()
 
 
-def run(productive: bool):
+def debug_file_exists():
+  return (Path(gettempdir()) / f"{PROG_NAME}-debug").is_file()
+
+
+def create_debug_file():
+  if not debug_file_exists():
+    (Path(gettempdir()) / f"{PROG_NAME}-debug").write_text("", "UTF-8")
+
+
+def run():
   arguments = sys.argv[1:]
-  parse_args(arguments, productive)
+  parse_args(arguments)
 
 
 def run_prod():
-  run(True)
+  run()
 
 
 if __name__ == "__main__":
-  run(not __debug__)
+  run_prod()
