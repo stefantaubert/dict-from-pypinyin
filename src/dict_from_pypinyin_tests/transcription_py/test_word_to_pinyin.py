@@ -10,9 +10,57 @@ def test_ABC():
   assert error.value.args[0] == "Syllable \"A\" couldn't be transcribed!"
 
 
-def test_㓛__raises_value_error_from_txpe_error():
+def test_誒__is_wrongly_transcribed():
+  res = word_to_pinyin("誒", style=Style.BOPOMOFO, v_to_u=False,
+                       strict=True, neutral_tone_with_five=True)
+  assert res == OrderedSet([('ㄟˊ',), ('ㄒㄧ',), ('ㄧˋ',), ('ê',), ('êˊ',),
+                           ('êˇ',), ('ㄟˇ',), ('êˋ',), ('ㄟˋ',), ('ㄟ',)])
+
+
+def test_欸__is_wrongly_transcribed():
+  res = word_to_pinyin("欸", style=Style.BOPOMOFO, v_to_u=False,
+                       strict=True, neutral_tone_with_five=True)
+  assert res == OrderedSet([('ㄞ',), ('ㄞˇ',), ('ê',), ('êˊ',), ('êˇ',),
+                           ('êˋ',), ('ㄒㄧㄝˋ',), ('ㄟˊ',), ('ㄟˇ',), ('ㄟˋ',), ('ㄟ',)])
+
+
+def test_㓛_tone2__raises_value_error_from_txpe_error():
   with raises(ValueError) as error:
     word_to_pinyin("㓛", style=Style.TONE2, v_to_u=False, strict=True, neutral_tone_with_five=True)
+  assert error.value.args[0] == "Syllable \"㓛\" couldn't be transcribed!"
+
+
+def test_㓛_tone3__raises_value_error_from_txpe_error():
+  with raises(ValueError) as error:
+    word_to_pinyin("㓛", style=Style.TONE3, v_to_u=False, strict=True, neutral_tone_with_five=True)
+  assert error.value.args[0] == "Syllable \"㓛\" couldn't be transcribed!"
+
+
+def test_㓛_bopomofo__raises_value_error_from_txpe_error():
+  with raises(ValueError) as error:
+    word_to_pinyin("㓛", style=Style.BOPOMOFO, v_to_u=False,
+                   strict=True, neutral_tone_with_five=True)
+  assert error.value.args[0] == "Syllable \"㓛\" couldn't be transcribed!"
+
+
+def test_㓛_bopomofo_first__raises_value_error_from_txpe_error():
+  with raises(ValueError) as error:
+    word_to_pinyin("㓛", style=Style.BOPOMOFO_FIRST, v_to_u=False,
+                   strict=True, neutral_tone_with_five=True)
+  assert error.value.args[0] == "Syllable \"㓛\" couldn't be transcribed!"
+
+
+def test_㓛_cyrillic__raises_value_error_from_txpe_error():
+  with raises(ValueError) as error:
+    word_to_pinyin("㓛", style=Style.CYRILLIC, v_to_u=False,
+                   strict=True, neutral_tone_with_five=True)
+  assert error.value.args[0] == "Syllable \"㓛\" couldn't be transcribed!"
+
+
+def test_㓛_wadegiles__raises_value_error_from_txpe_error():
+  with raises(ValueError) as error:
+    word_to_pinyin("㓛", style=Style.WADEGILES, v_to_u=False,
+                   strict=True, neutral_tone_with_five=True)
   assert error.value.args[0] == "Syllable \"㓛\" couldn't be transcribed!"
 
 

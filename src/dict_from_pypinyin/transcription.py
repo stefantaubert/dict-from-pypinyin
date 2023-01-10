@@ -26,6 +26,10 @@ def word_to_pinyin(word: str, style: Style, v_to_u: bool, strict: bool, neutral_
     if [syllable] == syllable_pinyins[0]:
       raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
 
+    # e.g. [['㓛5']]
+    if style in {Style.TONE3, Style.BOPOMOFO} and syllable in syllable_pinyins[0][0]:
+      raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
+
     heteronyms = syllable_pinyins[0]
     syllables_pinyins.append(heteronyms)
 
