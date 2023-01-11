@@ -5,6 +5,7 @@
 [![MIT](https://img.shields.io/github/license/stefantaubert/dict-from-pypinyin.svg)](https://github.com/stefantaubert/dict-from-pypinyin/blob/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/wheel/dict-from-pypinyin.svg)](https://pypi.python.org/pypi/dict-from-pypinyin)
 [![PyPI](https://img.shields.io/pypi/implementation/dict-from-pypinyin.svg)](https://pypi.python.org/pypi/dict-from-pypinyin)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7524283.svg)](https://doi.org/10.5281/zenodo.7524283)
 
 Command-line interface (CLI) to create a pronunciation dictionary by looking up pinyin transcriptions using [pypinyin](https://github.com/mozillazg/python-pinyin) including the possibility of ignoring punctuation and splitting words on hyphens before transcribing them.
 

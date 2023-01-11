@@ -59,9 +59,10 @@ dict-from-pypinyin-cli = "dict_from_pypinyin.cli:run_prod"
 where = ["src"]
 include = [
   "dict_from_pypinyin",
+  "dict_from_pypinyin_tests",
+  "dict_from_pypinyin_tests.*"
 ]
 exclude = [
-  "dict_from_pypinyin_tests",
   "dict_from_pypinyin_debug"
 ]
 namespaces = true
