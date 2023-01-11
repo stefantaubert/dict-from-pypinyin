@@ -13,7 +13,7 @@ def word_to_pinyin(word: str, style: Style, v_to_u: bool, strict: bool, neutral_
   for syllable in word:
     try:
       syllable_pinyins = pinyin(syllable, style=style, heteronym=True,
-                                errors='default', strict=strict,
+                                errors='ignore', strict=strict,
                                 v_to_u=v_to_u, neutral_tone_with_five=neutral_tone_with_five)
     except ValueError as error:
       raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!") from error
@@ -23,12 +23,12 @@ def word_to_pinyin(word: str, style: Style, v_to_u: bool, strict: bool, neutral_
     if len(syllable_pinyins) != 1 or len(syllable_pinyins[0]) == 0:
       raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
 
-    if [syllable] == syllable_pinyins[0]:
-      raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
+    # if [syllable] == syllable_pinyins[0]:
+    #   raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
 
-    # e.g. [['㓛5']]
-    if style in {Style.TONE3, Style.BOPOMOFO} and syllable in syllable_pinyins[0][0]:
-      raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
+    # # e.g. [['㓛5']]
+    # if style in {Style.TONE3, Style.BOPOMOFO} and syllable in syllable_pinyins[0][0]:
+    #   raise ValueError(f"Syllable \"{syllable}\" couldn't be transcribed!")
 
     heteronyms = syllable_pinyins[0]
     syllables_pinyins.append(heteronyms)
