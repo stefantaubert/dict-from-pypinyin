@@ -6,7 +6,7 @@
 [![PyPI](https://img.shields.io/pypi/wheel/dict-from-pypinyin.svg)](https://pypi.python.org/pypi/dict-from-pypinyin)
 [![PyPI](https://img.shields.io/pypi/implementation/dict-from-pypinyin.svg)](https://pypi.python.org/pypi/dict-from-pypinyin)
 
-Command-line interface (CLI) to create a pronunciation dictionary by looking up IPA transcriptions using [pypinyin](https://github.com/mozillazg/python-pinyin) including the possibility of ignoring punctuation and splitting words on hyphens before transcribing them.
+Command-line interface (CLI) to create a pronunciation dictionary by looking up pinyin transcriptions using [pypinyin](https://github.com/mozillazg/python-pinyin) including the possibility of ignoring punctuation and splitting words on hyphens before transcribing them.
 
 ## Installation
 
@@ -37,8 +37,7 @@ EOF
 dict-from-pypinyin-cli \
   /tmp/vocabulary.txt \
   /tmp/result.dict \
-  --split-on-hyphen \
-  --n-jobs 4
+  --split-on-hyphen
 
 cat /tmp/result.dict
 ```
@@ -84,8 +83,8 @@ Output:
 ## Dependencies
 
 - `pronunciation-dictionary >= 0.0.5`
-- `ordered-set >= 4.1.0`
 - `word-to-pronunciation >= 0.0.1`
+- `ordered-set >= 4.1.0`
 - `pypinyin >= 0.47.1, < 0.48`
 - `tqdm`
 
