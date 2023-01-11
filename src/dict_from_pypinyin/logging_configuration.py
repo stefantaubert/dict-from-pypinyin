@@ -1,12 +1,9 @@
 import logging
 import os
 from logging import DEBUG, Formatter, Handler, Logger, LogRecord, StreamHandler, getLogger
-from logging.handlers import MemoryHandler, QueueHandler
+from logging.handlers import MemoryHandler
 from pathlib import Path
-from queue import Queue
-from typing import Dict, Generator, List, Tuple
-
-from ordered_set import OrderedSet
+from typing import List, Tuple
 
 # class StoreRecordsHandler(Handler):
 # slower than other impl (maybe due to lock-things)

@@ -10,7 +10,7 @@ from typing import Dict, Optional, Tuple
 from ordered_set import OrderedSet
 from pronunciation_dictionary import (PronunciationDict, Pronunciations, SerializationOptions, Word,
                                       save_dict)
-from pypinyin import Style, pinyin
+from pypinyin import Style
 from tqdm import tqdm
 from word_to_pronunciation import Options, get_pronunciations_from_word
 
