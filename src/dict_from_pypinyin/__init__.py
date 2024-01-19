@@ -1,1 +1,2 @@
 from dict_from_pypinyin.api import word_to_pinyin
+from dict_from_pypinyin.core import convert_chinese_to_pinyin
