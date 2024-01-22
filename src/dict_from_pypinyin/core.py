@@ -1,6 +1,21 @@
 
+import os
 from argparse import ArgumentParser, Namespace
-from dict_from_pypinyin.transcription import word_to_pinyin
+from collections import OrderedDict
+from functools import partial
+from logging import getLogger
+from multiprocessing.pool import Pool
+from pathlib import Path
+from tempfile import gettempdir
+from typing import Any, Dict, Optional, Set, Tuple
+
+from ordered_set import OrderedSet
+from pronunciation_dictionary import (PronunciationDict, Pronunciations, SerializationOptions, Word,
+                                      save_dict)
+from pypinyin import Style
+from tqdm import tqdm
+from word_to_pronunciation import Options, get_pronunciations_from_word
+
 from dict_from_pypinyin.argparse_helper import (DEFAULT_PUNCTUATION, ConvertToOrderedSetAction,
                                                 EnumAction, add_chunksize_argument,
                                                 add_encoding_argument, add_maxtaskperchild_argument,
@@ -8,23 +23,38 @@ from dict_from_pypinyin.argparse_helper import (DEFAULT_PUNCTUATION, ConvertToOr
                                                 get_optional, parse_existing_file,
                                                 parse_non_empty_or_whitespace, parse_path,
                                                 parse_positive_float)
-from word_to_pronunciation import Options, get_pronunciations_from_word
-from tqdm import tqdm
-from pypinyin import Style
-from pronunciation_dictionary import (PronunciationDict, Pronunciations, SerializationOptions, Word,
-                                      save_dict)
-from ordered_set import OrderedSet
-from typing import Dict, Optional, Set, Tuple
-from tempfile import gettempdir
-from pathlib import Path
-from multiprocessing.pool import Pool
-from logging import getLogger
-from functools import partial
-from collections import OrderedDict
+from dict_from_pypinyin.transcription import word_to_pinyin
 
 
-def convert_chinese_to_pinyin(vocabulary: OrderedSet[Word], style: Style, v_to_u: bool, strict: bool, neutral_tone_with_five: bool, weight: float,
-                              trim_symbols: Set[str], split_on_hyphen: bool, n_jobs: int, maxtasksperchild: Optional[int], chunksize: int, silent: bool = True) -> Tuple[PronunciationDict, OrderedSet[Word]]:
+def validate_type(obj: Any, t: type) -> None:
+  if not isinstance(obj, t):
+    raise ValueError(f"Value needs of type '{t.__name__}'!")
+
+
+def validate_exact_type(obj: Any, t: type) -> None:
+  # pylint: disable=C0123:unidiomatic-typecheck
+  if type(obj) is not t:
+    raise ValueError(f"Value needs of type '{t.__name__}'!")
+
+
+def convert_chinese_to_pinyin(vocabulary: OrderedSet[Word], style: Style = Style.TONE3, v_to_u: bool = True, strict: bool = True, neutral_tone_with_five: bool = True, weight: float = 1.0,
+                              trim_symbols: Optional[Set[str]] = None, split_on_hyphen: bool = True, n_jobs: int = os.cpu_count(), maxtasksperchild: Optional[int] = None, chunksize: int = 100_000, silent: bool = True) -> Tuple[PronunciationDict, OrderedSet[Word]]:
+  validate_exact_type(vocabulary, OrderedSet)
+  if trim_symbols is None:
+    trim_symbols = set()
+  validate_type(v_to_u, bool)
+  validate_type(neutral_tone_with_five, bool)
+  validate_type(weight, float)
+  if style not in list(Style):
+    raise ValueError("Style not found!")
+  validate_type(trim_symbols, set)
+  validate_type(split_on_hyphen, bool)
+  validate_type(n_jobs, int)
+  validate_type(chunksize, int)
+  if maxtasksperchild is not None:
+    validate_type(maxtasksperchild, int)
+  validate_type(silent, bool)
+
   trim = ''.join(trim_symbols)
   options = Options(trim, split_on_hyphen, False, False, weight)
 
