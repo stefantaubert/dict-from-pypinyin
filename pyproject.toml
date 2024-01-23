@@ -1,9 +1,9 @@
 [project]
 name = "dict-from-pypinyin"
-version = "0.0.1"
+version = "0.0.2"
 description = "Command-line interface (CLI) to create a pronunciation dictionary by looking up pinyin transcriptions using pypinyin including the possibility of ignoring punctuation and splitting words on hyphens before transcribing them."
 readme = "README.md"
-requires-python = ">=3.8, <4"
+requires-python = ">=3.8, <3.13"
 license = {text = "MIT"}
 authors = [
   {email = "pypi@stefantaubert.com"},
@@ -38,13 +38,14 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-  "pronunciation-dictionary >= 0.0.5",
+  "pronunciation-dictionary >= 0.0.6",
   "word-to-pronunciation >= 0.0.1",
   "ordered-set >= 4.1.0",
-  "pypinyin >=0.47.1, < 0.48",
+  "pypinyin >=0.50, < 0.51",
   "tqdm"
 ]
 
@@ -111,7 +112,7 @@ useLibraryCodeForTypes = true
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{38,39,310,311}
+envlist = py{38,39,310,311,312}
 isolated_build = true
 
 [testenv]

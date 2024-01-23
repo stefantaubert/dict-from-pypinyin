@@ -13,18 +13,22 @@ def test_non_hanzi_ABC__raises_value_error():
   assert error.value.args[0] == "Syllable \"A\" couldn't be transcribed!"
 
 
-def test_誒__is_wrongly_transcribed():
+def test_誒__is_correctly_transcribed():
+  # in V 0.47.1 this was a bug
   res = word_to_pinyin("誒", style=Style.BOPOMOFO, v_to_u=False,
                        strict=True, neutral_tone_with_five=True)
-  assert res == OrderedSet([('ㄟˊ',), ('ㄒㄧ',), ('ㄧˋ',), ('ê',), ('êˊ',),
-                           ('êˇ',), ('ㄟˇ',), ('êˋ',), ('ㄟˋ',), ('ㄟ',)])
+  # assert res == OrderedSet([('ㄟˊ',), ('ㄒㄧ',), ('ㄧˋ',), ('ê',), ('êˊ',),('êˇ',), ('ㄟˇ',), ('êˋ',), ('ㄟˋ',), ('ㄟ',)])
+  assert res == OrderedSet([('ㄟˊ',), ('ㄒㄧ',), ('ㄧˋ',), ('ㄝ',), ('ㄝˊ',),
+                           ('ㄝˇ',), ('ㄟˇ',), ('ㄝˋ',), ('ㄟˋ',), ('ㄟ',)])
 
 
-def test_欸__is_wrongly_transcribed():
+def test_欸__is_correctly_transcribed():
+  # in V 0.47.1 this was a bug
   res = word_to_pinyin("欸", style=Style.BOPOMOFO, v_to_u=False,
                        strict=True, neutral_tone_with_five=True)
-  assert res == OrderedSet([('ㄞ',), ('ㄞˇ',), ('ê',), ('êˊ',), ('êˇ',),
-                           ('êˋ',), ('ㄒㄧㄝˋ',), ('ㄟˊ',), ('ㄟˇ',), ('ㄟˋ',), ('ㄟ',)])
+  # assert res == OrderedSet([('ㄞ',), ('ㄞˇ',), ('ê',), ('êˊ',), ('êˇ',),('êˋ',), ('ㄒㄧㄝˋ',), ('ㄟˊ',), ('ㄟˇ',), ('ㄟˋ',), ('ㄟ',)])
+  assert res == OrderedSet([('ㄞ',), ('ㄞˇ',), ('ㄝ',), ('ㄝˊ',), ('ㄝˇ',),
+                           ('ㄝˋ',), ('ㄒㄧㄝˋ',), ('ㄟˊ',), ('ㄟˇ',), ('ㄟˋ',), ('ㄟ',)])
 
 
 def test_㓛_tone2__raises_value_error_from_type_error():

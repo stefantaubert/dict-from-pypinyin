@@ -17,10 +17,10 @@ build = "*"
 tox = "*"
 
 [packages]
-pronunciation-dictionary = ">=0.0.5"
+pronunciation-dictionary = ">=0.0.6"
 word-to-pronunciation = ">=0.0.1"
 ordered-set = ">=4.1.0"
-pypinyin = ">=0.47.1"
+pypinyin = ">=0.50"
 tqdm = "*"
 
 [requires]

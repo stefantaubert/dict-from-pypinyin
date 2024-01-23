@@ -1,18 +1,11 @@
 from argparse import ArgumentParser, Namespace
-from collections import OrderedDict
-from functools import partial
 from logging import getLogger
-from multiprocessing.pool import Pool
 from pathlib import Path
 from tempfile import gettempdir
-from typing import Dict, Optional, Set, Tuple
 
 from ordered_set import OrderedSet
-from pronunciation_dictionary import (PronunciationDict, Pronunciations, SerializationOptions, Word,
-                                      save_dict)
+from pronunciation_dictionary import SerializationOptions, save_dict
 from pypinyin import Style
-from tqdm import tqdm
-from word_to_pronunciation import Options, get_pronunciations_from_word
 
 from dict_from_pypinyin.argparse_helper import (DEFAULT_PUNCTUATION, ConvertToOrderedSetAction,
                                                 EnumAction, add_chunksize_argument,
@@ -22,7 +15,6 @@ from dict_from_pypinyin.argparse_helper import (DEFAULT_PUNCTUATION, ConvertToOr
                                                 parse_non_empty_or_whitespace, parse_path,
                                                 parse_positive_float)
 from dict_from_pypinyin.core import convert_chinese_to_pinyin
-from dict_from_pypinyin.transcription import word_to_pinyin
 
 
 def get_app_try_add_vocabulary_from_pronunciations_parser(parser: ArgumentParser):

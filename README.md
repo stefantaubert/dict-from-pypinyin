@@ -5,7 +5,7 @@
 [![MIT](https://img.shields.io/github/license/stefantaubert/dict-from-pypinyin.svg)](https://github.com/stefantaubert/dict-from-pypinyin/blob/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/wheel/dict-from-pypinyin.svg)](https://pypi.python.org/pypi/dict-from-pypinyin)
 [![PyPI](https://img.shields.io/pypi/implementation/dict-from-pypinyin.svg)](https://pypi.python.org/pypi/dict-from-pypinyin)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7524283.svg)](https://doi.org/10.5281/zenodo.7524283)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10554720.svg)](https://doi.org/10.5281/zenodo.10554720)
 
 Command-line interface (CLI) to create a pronunciation dictionary by looking up pinyin transcriptions using [pypinyin](https://github.com/mozillazg/python-pinyin) including the possibility of ignoring punctuation and splitting words on hyphens before transcribing them.
 
@@ -81,13 +81,50 @@ Output:
 『机具-机呀？  『 wèi jù - wèi xiā ？
 ```
 
-## Dependencies
+## Development setup
 
-- `pronunciation-dictionary >= 0.0.5`
-- `word-to-pronunciation >= 0.0.1`
-- `ordered-set >= 4.1.0`
-- `pypinyin >= 0.47.1, < 0.48`
-- `tqdm`
+```sh
+# update
+sudo apt update
+# install Python 3.8, 3.9, 3.10 & 3.11 for ensuring that tests can be run
+sudo apt install python3-pip \
+  python3.8 python3.8-dev python3.8-distutils python3.8-venv \
+  python3.9 python3.9-dev python3.9-distutils python3.9-venv \
+  python3.10 python3.10-dev python3.10-distutils python3.10-venv \
+  python3.11 python3.11-dev python3.11-distutils python3.11-venv \
+  python3.12 python3.12-dev python3.12-distutils python3.12-venv
+# install pipenv for creation of virtual environments
+python3.8 -m pip install pipenv --user
+
+# check out repo
+git clone https://github.com/stefantaubert/dict-from-pypinyin.git
+cd dict-from-pypinyin
+# create virtual environment
+python3.8 -m pipenv install --dev
+```
+
+## Running the tests
+
+```sh
+# first install the tool like in "Development setup"
+# then, navigate into the directory of the repo (if not already done)
+cd dict-from-pypinyin
+# activate environment
+python3.8 -m pipenv shell
+# run tests
+tox
+```
+
+Final lines of test result output:
+
+```log
+  py38: commands succeeded
+  py39: commands succeeded
+  py310: commands succeeded
+  py311: commands succeeded
+  py312: commands succeeded
+  congratulations :)
+```
 
 ## License
 
