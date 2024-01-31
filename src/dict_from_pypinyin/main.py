@@ -65,7 +65,7 @@ def get_pronunciations_files(ns: Namespace) -> bool:
   v_to_u = not ns.ü_to_v
 
   dictionary_instance, unresolved_words = convert_chinese_to_pinyin(
-    vocabulary_words, ns.style, v_to_u, strict, ns.neutral_tone_with_five, ns.weight, ns.trim, ns.split_on_hyphen, ns.n_jobs, ns.maxtasksperchild, ns.chunksize, silent=False)
+    vocabulary_words, ns.style, v_to_u, strict, ns.neutral_tone_with_five, ns.weight, set(ns.trim), ns.split_on_hyphen, ns.n_jobs, ns.maxtasksperchild, ns.chunksize, silent=False)
 
   s_options = SerializationOptions(ns.parts_sep, ns.include_numbers, ns.include_weights)
 
